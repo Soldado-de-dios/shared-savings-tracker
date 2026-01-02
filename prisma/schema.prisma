@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Goal {
+  id            String   @id @default(uuid())
+  targetAmount  Int      // stored in USD cents
+  currentAmount Int      @default(0) // stored in USD cents
+  currency      String   @default("USD") // Display currency preference (USD, GBP, SEK)
+  updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now())
+}
+
+model Contribution {
+  id               String   @id @default(uuid())
+  amount           Int      // stored in USD cents
+  originalAmount   Int      // Original input amount (e.g. 100)
+  originalCurrency String   // e.g. "SEK"
+  exchangeRate     Float    // Rate used at conversion time
+  userId           String?  // Optional identifier
+  createdAt        DateTime @default(now())
+}
